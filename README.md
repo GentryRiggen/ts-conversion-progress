@@ -2,12 +2,10 @@
 
 `yarn add -D ts-conversion-progress`
 
-*Because no one uses npm still, right?*
-
 Add a script to your package.json
 ```
 "scripts": {
-  "ts-conversion-progress": "node ts-conversion-progress src/"
+  "ts-conversion-progress": "node node_modules/ts-conversion-progress src/"
 }
 ```
 
