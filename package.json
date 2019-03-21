@@ -1,0 +1,37 @@
+{
+  "name": "ts-conversion-progress",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Gentry Riggen",
+    "url": "https://gentry.codes"
+  },
+  "scripts": {
+    "build": "babel ts-conversion-progress.js --out-file index.js",
+    "pretry": "yarn build",
+    "try": "node index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/runtime": "^7.0.0-beta.55",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.4.0",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "ink": "^2.0.5",
+    "ink-big-text": "^1.0.1",
+    "ink-box": "^1.0.0",
+    "ink-gradient": "^1.0.0",
+    "ink-spinner": "^3.0.0",
+    "node": "^11.11.0",
+    "ramda": "^0.26.1",
+    "react": "^16.8.4",
+    "recursive-readdir": "^2.2.2"
+  }
+}
