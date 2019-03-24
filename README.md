@@ -1,5 +1,7 @@
 # TypeScript Conversion Progress
 
+![Image of CLI output of ts-conversion-progress library](https://i.imgur.com/1CGZETx.jpg)
+
 `yarn add -D ts-conversion-progress`
 
 Add a script to your package.json
