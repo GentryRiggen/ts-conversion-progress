@@ -1,8 +1,9 @@
 {
   "name": "ts-conversion-progress",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "index.js",
   "license": "MIT",
+  "repository": "gentryriggen/ts-conversion-progress",
   "author": {
     "name": "Gentry Riggen",
     "url": "https://gentry.codes"
