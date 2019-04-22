@@ -49,7 +49,6 @@ class TSConversionProgress extends PureComponent {
       return false
     }
     const regex = new RegExp(ignore)
-    console.log('REGEX', file, ignore, regex.test(file))
     return regex.test(file)
   }
 
