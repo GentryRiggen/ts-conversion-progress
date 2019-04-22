@@ -66,16 +66,7 @@ class TSConversionProgress extends PureComponent {
   }
 
   shouldIgnoreFile = (file, stats) => {
-    console.log(file)
-    // return false
-    const extension = path.extname(file)
     const anyValidReason = this.anyValidReasonsToIncludeFile(file)
-    console.log({
-      file,
-      anyValidReason,
-      isDir: stats.isDirectory(),
-      ignoring: stats.isDirectory() || !anyValidReason,
-    })
     return !stats.isDirectory() && !anyValidReason
   }
 
