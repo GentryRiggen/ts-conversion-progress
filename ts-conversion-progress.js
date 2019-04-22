@@ -43,6 +43,42 @@ class TSConversionProgress extends PureComponent {
       R.map(path.extname),
     )(files)
 
+  askUserIfShouldIgnore = file => {
+    const ignore = R.prop(3, process.argv)
+    if (!ignore) {
+      return false
+    }
+    const regex = new RegExp(ignore)
+    console.log('REGEX', file, ignore, regex.test(file))
+    return regex.test(file)
+  }
+
+  anyValidReasonsToIncludeFile = file => {
+    if (this.askUserIfShouldIgnore(file)) {
+      return false
+    }
+    return R.anyPass([
+      file => path.extname(file) === '.js',
+      file => path.extname(file) === '.ts',
+      file => path.extname(file) === '.tsx',
+      file => path.extname(file) === '.jsx',
+    ])(file)
+  }
+
+  shouldIgnoreFile = (file, stats) => {
+    console.log(file)
+    // return false
+    const extension = path.extname(file)
+    const anyValidReason = this.anyValidReasonsToIncludeFile(file)
+    console.log({
+      file,
+      anyValidReason,
+      isDir: stats.isDirectory(),
+      ignoring: stats.isDirectory() || !anyValidReason,
+    })
+    return !stats.isDirectory() && !anyValidReason
+  }
+
   readFiles = async () => {
     const directory = R.prop(2, process.argv)
     if (!fs.existsSync(directory)) {
@@ -51,18 +87,12 @@ class TSConversionProgress extends PureComponent {
         readError: `Directory "${directory} not found`,
       })
     }
-    const ignoreFile = (file, stats) => {
-      const extension = path.extname(file)
-      const ignoring =
-        !stats.isDirectory() &&
-        extension !== '.js' &&
-        extension !== '.ts' &&
-        extension !== '.tsx' &&
-        extension !== '.jsx'
-      return ignoring
-    }
     try {
-      const files = await recursive(directory, [ignoreFile], this.onFilesRead)
+      const files = await recursive(
+        directory,
+        [this.shouldIgnoreFile],
+        this.onFilesRead,
+      )
       this.setState({ readingFiles: false, files })
     } catch (err) {
       this.setState({ readingFiles: false, readError: err })

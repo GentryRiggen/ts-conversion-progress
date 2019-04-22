@@ -51,6 +51,38 @@ class TSConversionProgress extends _react.PureComponent {
     (0, _defineProperty2.default)(this, "isJSFile", file => R.anyPass(['.js', '.jsx'].map(e => R.equals(e)))(_path.default.extname(file)));
     (0, _defineProperty2.default)(this, "isTSFile", file => R.anyPass(['.ts', '.tsx'].map(e => R.equals(e)))(_path.default.extname(file)));
     (0, _defineProperty2.default)(this, "getFileTypeCount", (files, extensions = []) => R.compose(R.length, R.filter(fileExtension => R.anyPass(extensions.map(e => R.equals(e)))(fileExtension)), R.map(_path.default.extname))(files));
+    (0, _defineProperty2.default)(this, "askUserIfShouldIgnore", file => {
+      const ignore = R.prop(3, process.argv);
+
+      if (!ignore) {
+        return false;
+      }
+
+      const regex = new RegExp(ignore);
+      console.log('REGEX', file, ignore, regex.test(file));
+      return regex.test(file);
+    });
+    (0, _defineProperty2.default)(this, "anyValidReasonsToIncludeFile", file => {
+      if (this.askUserIfShouldIgnore(file)) {
+        return false;
+      }
+
+      return R.anyPass([file => _path.default.extname(file) === '.js', file => _path.default.extname(file) === '.ts', file => _path.default.extname(file) === '.tsx', file => _path.default.extname(file) === '.jsx'])(file);
+    });
+    (0, _defineProperty2.default)(this, "shouldIgnoreFile", (file, stats) => {
+      console.log(file); // return false
+
+      const extension = _path.default.extname(file);
+
+      const anyValidReason = this.anyValidReasonsToIncludeFile(file);
+      console.log({
+        file,
+        anyValidReason,
+        isDir: stats.isDirectory(),
+        ignoring: stats.isDirectory() || !anyValidReason
+      });
+      return !stats.isDirectory() && !anyValidReason;
+    });
     (0, _defineProperty2.default)(this, "readFiles", async () => {
       const directory = R.prop(2, process.argv);
 
@@ -61,15 +93,8 @@ class TSConversionProgress extends _react.PureComponent {
         });
       }
 
-      const ignoreFile = (file, stats) => {
-        const extension = _path.default.extname(file);
-
-        const ignoring = !stats.isDirectory() && extension !== '.js' && extension !== '.ts' && extension !== '.tsx' && extension !== '.jsx';
-        return ignoring;
-      };
-
       try {
-        const files = await (0, _recursiveReaddir.default)(directory, [ignoreFile], this.onFilesRead);
+        const files = await (0, _recursiveReaddir.default)(directory, [this.shouldIgnoreFile], this.onFilesRead);
         this.setState({
           readingFiles: false,
           files

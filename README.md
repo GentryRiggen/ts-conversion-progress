@@ -11,4 +11,13 @@ Add a script to your package.json
 }
 ```
 
-The only argument, `src/` in the example, is the directory where your code is. It will recursively search that directory for js, jsx, ts, and tsx files and do the math...
+The only required argument, `src/` in the example, is the directory where your code is. It will recursively search that directory for js, jsx, ts, and tsx files and do the math...
+
+Optionally you can add a second argument which can be a regex pattern to ignore files. For example
+```
+"scripts": {
+  "ts-conversion-progress": "node node_modules/ts-conversion-progress src/ .+\.test.js$"
+}
+```
+
+This will ignore all files that end with `.test.js`
