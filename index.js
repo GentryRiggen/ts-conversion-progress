@@ -70,17 +70,7 @@ class TSConversionProgress extends _react.PureComponent {
       return R.anyPass([file => _path.default.extname(file) === '.js', file => _path.default.extname(file) === '.ts', file => _path.default.extname(file) === '.tsx', file => _path.default.extname(file) === '.jsx'])(file);
     });
     (0, _defineProperty2.default)(this, "shouldIgnoreFile", (file, stats) => {
-      console.log(file); // return false
-
-      const extension = _path.default.extname(file);
-
       const anyValidReason = this.anyValidReasonsToIncludeFile(file);
-      console.log({
-        file,
-        anyValidReason,
-        isDir: stats.isDirectory(),
-        ignoring: stats.isDirectory() || !anyValidReason
-      });
       return !stats.isDirectory() && !anyValidReason;
     });
     (0, _defineProperty2.default)(this, "readFiles", async () => {
