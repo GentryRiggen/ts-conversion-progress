@@ -59,7 +59,6 @@ class TSConversionProgress extends _react.PureComponent {
       }
 
       const regex = new RegExp(ignore);
-      console.log('REGEX', file, ignore, regex.test(file));
       return regex.test(file);
     });
     (0, _defineProperty2.default)(this, "anyValidReasonsToIncludeFile", file => {
@@ -96,7 +95,17 @@ class TSConversionProgress extends _react.PureComponent {
         });
       }
     });
-    (0, _defineProperty2.default)(this, "renderFile", file => {
+    (0, _defineProperty2.default)(this, "renderFile", (f, index) => {
+      const searchDir = `${R.prop(2, process.argv)}${_path.default.sep}`;
+      const file = f.replace(searchDir, '');
+
+      const fileDir = _path.default.dirname(file);
+
+      const prevFile = index === 0 ? '' : this.state.files[index - 1].replace(searchDir, '');
+
+      const prevFileDir = _path.default.dirname(prevFile);
+
+      const newDir = prevFileDir !== fileDir;
       const color = this.isJSFile(file) ? {
         red: true
       } : {
@@ -104,7 +113,13 @@ class TSConversionProgress extends _react.PureComponent {
       };
       return _react.default.createElement("div", {
         key: file
-      }, _react.default.createElement(_ink.Color, color, file));
+      }, newDir && _react.default.createElement("div", null, _react.default.createElement("div", {
+        style: {
+          marginTop: 1
+        }
+      }), _react.default.createElement(_ink.Color, {
+        whiteBright: true
+      }, fileDir)), _react.default.createElement(_ink.Color, color, '- ', file));
     });
   }
 
@@ -160,20 +175,7 @@ class TSConversionProgress extends _react.PureComponent {
     const jsFileCount = this.getFileTypeCount(files, ['.js', '.jsx']);
     const tsFileCount = this.getFileTypeCount(files, ['.ts', '.tsx']);
     const total = jsFileCount + tsFileCount;
-    const progress = total <= 0 ? 0 : getPercentage(tsFileCount / total); // return (
-    //   <div>
-    //     <Gradient name="pastel">
-    //       <BigText text={`${progress}% Complete`} />
-    //     </Gradient>
-    //     <Box borderStyle="round" borderColor="cyan" padding={1}>
-    //       <Color red>Javascript Files: {jsFileCount}</Color>
-    //     </Box>
-    //     <Box borderStyle="round" borderColor="cyan" padding={1}>
-    //       <Color green>TypeScript Files: {tsFileCount}</Color>
-    //     </Box>
-    //   </div>
-    // )
-
+    const progress = total <= 0 ? 0 : getPercentage(tsFileCount / total);
     return _react.default.createElement("div", null, _react.default.createElement(_inkBox.default, {
       borderStyle: "round",
       borderColor: "cyan"

@@ -98,11 +98,29 @@ class TSConversionProgress extends PureComponent {
     )
   }
 
-  renderFile = file => {
+  renderFile = (f, index) => {
+    const searchDir = `${R.prop(2, process.argv)}${path.sep}`
+    const file = f.replace(searchDir, '')
+    const fileDir = path.dirname(file)
+
+    const prevFile =
+      index === 0 ? '' : this.state.files[index - 1].replace(searchDir, '')
+    const prevFileDir = path.dirname(prevFile)
+    const newDir = prevFileDir !== fileDir
     const color = this.isJSFile(file) ? { red: true } : { green: true }
+
     return (
       <div key={file}>
-        <Color {...color}>{file}</Color>
+        {newDir && (
+          <div>
+            <div style={{ marginTop: 1 }} />
+            <Color whiteBright>{fileDir}</Color>
+          </div>
+        )}
+        <Color {...color}>
+          {'- '}
+          {file}
+        </Color>
       </div>
     )
   }
@@ -137,19 +155,6 @@ class TSConversionProgress extends PureComponent {
     const tsFileCount = this.getFileTypeCount(files, ['.ts', '.tsx'])
     const total = jsFileCount + tsFileCount
     const progress = total <= 0 ? 0 : getPercentage(tsFileCount / total)
-    // return (
-    //   <div>
-    //     <Gradient name="pastel">
-    //       <BigText text={`${progress}% Complete`} />
-    //     </Gradient>
-    //     <Box borderStyle="round" borderColor="cyan" padding={1}>
-    //       <Color red>Javascript Files: {jsFileCount}</Color>
-    //     </Box>
-    //     <Box borderStyle="round" borderColor="cyan" padding={1}>
-    //       <Color green>TypeScript Files: {tsFileCount}</Color>
-    //     </Box>
-    //   </div>
-    // )
     return (
       <div>
         <Box borderStyle="round" borderColor="cyan">
