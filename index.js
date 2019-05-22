@@ -38,7 +38,6 @@ exports.roundToDecimal = roundToDecimal;
 const getPercentage = num => roundToDecimal(num * 100, 0);
 
 exports.getPercentage = getPercentage;
-console.log(getPercentage(0.998, 0));
 
 class TSConversionProgress extends _react.PureComponent {
   constructor(...args) {
