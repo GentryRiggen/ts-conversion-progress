@@ -31,13 +31,14 @@ var _inkGradient = _interopRequireDefault(require("ink-gradient"));
 
 var _inkBigText = _interopRequireDefault(require("ink-big-text"));
 
-const roundToDecimal = (num, count = 2) => parseFloat(num.toFixed(count));
+const roundToDecimal = num => parseFloat(Math.floor(num));
 
 exports.roundToDecimal = roundToDecimal;
 
 const getPercentage = num => roundToDecimal(num * 100, 0);
 
 exports.getPercentage = getPercentage;
+console.log(getPercentage(0.998, 0));
 
 class TSConversionProgress extends _react.PureComponent {
   constructor(...args) {

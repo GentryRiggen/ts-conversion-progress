@@ -9,7 +9,7 @@ import Spinner from 'ink-spinner'
 import Gradient from 'ink-gradient'
 import BigText from 'ink-big-text'
 
-export const roundToDecimal = (num, count = 2) => parseFloat(num.toFixed(count))
+export const roundToDecimal = num => parseFloat(Math.floor(num))
 export const getPercentage = num => roundToDecimal(num * 100, 0)
 
 class TSConversionProgress extends PureComponent {
